@@ -159,3 +159,7 @@ data_loader_all.py
 
 # vscode
 .vscode/
+
+# torch
+checkpoints/
+result_*.txt
