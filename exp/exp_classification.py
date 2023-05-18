@@ -19,8 +19,8 @@ class Exp_Classification(Exp_Basic):
 
     def _build_model(self):
         # model input depends on data
-        train_data, train_loader = self._get_data(flag='TRAIN')
-        test_data, test_loader = self._get_data(flag='TEST')
+        train_data, train_loader = self._get_data(flag='TRAIN3')
+        test_data, test_loader = self._get_data(flag='TEST3')
         self.args.seq_len = max(train_data.max_seq_len, test_data.max_seq_len)
         self.args.pred_len = 0
         self.args.enc_in = train_data.feature_df.shape[1]
@@ -76,9 +76,9 @@ class Exp_Classification(Exp_Basic):
         return total_loss, accuracy
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag='TRAIN')
-        vali_data, vali_loader = self._get_data(flag='TEST')
-        test_data, test_loader = self._get_data(flag='TEST')
+        train_data, train_loader = self._get_data(flag='TRAIN3')
+        vali_data, vali_loader = self._get_data(flag='TEST3')
+        test_data, test_loader = self._get_data(flag='TEST3')
 
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
@@ -144,7 +144,7 @@ class Exp_Classification(Exp_Basic):
         return self.model
 
     def test(self, setting, test=0):
-        test_data, test_loader = self._get_data(flag='TEST')
+        test_data, test_loader = self._get_data(flag='TEST3')
         if test:
             print('loading model')
             self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))

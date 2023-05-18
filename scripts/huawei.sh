@@ -3,7 +3,7 @@ python -u run.py \
   --is_training 1 \
   --root_path ./dataset/Huawei/ \
   --model_id Huawei \
-  --model TimesNet \
+  --model DLinear \
   --data Huawei \
   --e_layers 2 \
   --batch_size 16 \
