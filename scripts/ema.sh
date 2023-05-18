@@ -1,0 +1,17 @@
+python -u run.py \
+  --task_name classification \
+  --is_training 1 \
+  --root_path ./dataset/Huawei/ema/ \
+  --model_id Huawei \
+  --model DLinear \
+  --data Huawei \
+  --e_layers 2 \
+  --batch_size 8 \
+  --d_model 32 \
+  --d_ff 32 \
+  --top_k 1 \
+  --des 'Exp' \
+  --itr 1 \
+  --learning_rate 0.001 \
+  --train_epochs 10 \
+  --patience 10

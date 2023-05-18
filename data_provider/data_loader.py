@@ -784,9 +784,9 @@ class Huawei(Dataset):
     def load_single(self, filepath):
         df = pd.read_pickle(filepath)
         df = df.reset_index()
-        df['label'] = df['抑郁得分'].apply(lambda x: 'depression' if x > 4 else 'non-depression')
+        df['label'] = df['mood']
         labels = df['label'].values
-        df = df[['heartrate', 'bloodoxygen', 'step']]
+        df = df[['avgHeartRate', 'avgOxygenSaturation', 'step']]
         labels = pd.Series(labels, dtype="category")
         self.class_names = labels.cat.categories
         labels_df = pd.DataFrame(labels.cat.codes,

@@ -19,8 +19,8 @@ class Exp_Classification(Exp_Basic):
 
     def _build_model(self):
         # model input depends on data
-        train_data, train_loader = self._get_data(flag='TRAIN3')
-        test_data, test_loader = self._get_data(flag='TEST3')
+        train_data, train_loader = self._get_data(flag='TRAIN1')
+        test_data, test_loader = self._get_data(flag='TEST1')
         self.args.seq_len = max(train_data.max_seq_len, test_data.max_seq_len)
         self.args.pred_len = 0
         self.args.enc_in = train_data.feature_df.shape[1]
@@ -67,8 +67,10 @@ class Exp_Classification(Exp_Basic):
 
         preds = torch.cat(preds, 0)
         trues = torch.cat(trues, 0)
-        probs = torch.nn.functional.softmax(preds)  # (total_samples, num_classes) est. prob. for each class and sample
-        predictions = torch.argmax(probs, dim=1).cpu().numpy()  # (total_samples,) int class index for each sample
+        probs = torch.nn.functional.softmax(preds)  
+        # (total_samples, num_classes) est. prob. for each class and sample
+        predictions = torch.argmax(probs, dim=1).cpu().numpy()  
+        # (total_samples,) int class index for each sample
         trues = trues.flatten().cpu().numpy()
         accuracy = cal_accuracy(predictions, trues)
 
@@ -76,9 +78,9 @@ class Exp_Classification(Exp_Basic):
         return total_loss, accuracy
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag='TRAIN3')
-        vali_data, vali_loader = self._get_data(flag='TEST3')
-        test_data, test_loader = self._get_data(flag='TEST3')
+        train_data, train_loader = self._get_data(flag='TRAIN1')
+        vali_data, vali_loader = self._get_data(flag='TEST1')
+        test_data, test_loader = self._get_data(flag='TEST1')
 
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
@@ -129,7 +131,9 @@ class Exp_Classification(Exp_Basic):
             test_loss, test_accuracy = self.vali(test_data, test_loader, criterion)
 
             print(
-                "Epoch: {0}, Steps: {1} | Train Loss: {2:.3f} Vali Loss: {3:.3f} Vali Acc: {4:.3f} Test Loss: {5:.3f} Test Acc: {6:.3f}"
+                "Epoch: {0}, Steps: {1} | Train Loss: {2:.3f} \
+                    Vali Loss: {3:.3f} Vali Acc: {4:.3f} \
+                        Test Loss: {5:.3f} Test Acc: {6:.3f}"
                 .format(epoch + 1, train_steps, train_loss, vali_loss, val_accuracy, test_loss, test_accuracy))
             early_stopping(-val_accuracy, self.model, path)
             if early_stopping.early_stop:
@@ -144,7 +148,7 @@ class Exp_Classification(Exp_Basic):
         return self.model
 
     def test(self, setting, test=0):
-        test_data, test_loader = self._get_data(flag='TEST3')
+        test_data, test_loader = self._get_data(flag='TEST1')
         if test:
             print('loading model')
             self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
